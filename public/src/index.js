@@ -36,7 +36,7 @@ window.getCourses = () => {
           let id = crs[i].id
           let first = id[0].toLowerCase()
           let code = id.slice(0, 3)
-          console.log(first, subject[0])
+  
           if (subject == 'careers') {
             if (code == 'CIV' || code == 'CHV' || code == 'GLC') {
               string += '<option value=' + id + '>' + id + '</option>'
@@ -136,6 +136,46 @@ window.onload = () => {
       addStudentForm.course3.value, 
       addStudentForm.course4.value
     ]
+    
+    // Course input error catching
+    for (let i = 0; i < crs.length; i++) {
+      let course = crs[i]
+
+      // Ensure proper formatting
+      if (
+        (course.length != 8 && course.length != 9)
+        || course[6] != '-'
+      ) {
+        document.getElementById("formconfirmation").innerText = 'Error submitting... Try again!'
+        alert('Make sure your courses have the proper code + section number! \n \n Courses should look like MPM2D1-12 or ENG2D1-1')
+        return 1;
+      }
+
+      // Alter common mistakes
+      else {
+
+        // 5th character 0 instead of O
+        if (course[4] == '0') {
+          let str = course.split('');
+          str[4] = 'O';
+          course = str.join('');
+        }
+
+        // Course code to uppercase
+        for (let j = 0; j < course.length; j++) {
+          let code = course.charCodeAt(j)
+
+          if (code >= 97 && code <= 122) {
+            let str = course.split('');
+            code -= 32
+
+            str[j] = String.fromCharCode(code);
+            course = str.join('');
+            crs[i] = course
+          }
+        }
+      }
+    }
 
     addDoc(colRefS, {
       firstname: addStudentForm.firstname.value,
