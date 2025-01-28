@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Northern Course Tracker</title>
   <script src="bundle.js"></script>
+  <style type ="text/css" >
+    .footer{ 
+        position: fixed;     
+        text-align: center;    
+        bottom: 10px; 
+        width: 100%;
+    }  
+ </style>
 </head>
   <body>
     <br>
@@ -20,8 +28,48 @@
       <p id="class-list">Choose a class!</p>
     </div>
 
-    
 
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <div>
+      <h3>Enter your own courses:</h3>
+      <form id="addform">
+        <label for="firstname">First Name:</label>
+        <input type="text" name="firstname" required>
+        <br>
+        <label for="lastname">Last Name:</label>
+        <input type="text" name="lastname" required>
+        <br>
+        <label for="course1">Course Code 1:</label>
+        <input type="text" name="course1" required>
+        <br>
+        <label for="course2">Course Code 2:</label>
+        <input type="text" name="course2" required>
+        <br>
+        <label for="course3">Course Code 3:</label>
+        <input type="text" name="course3" required>
+        <br>
+        <label for="course4">Course Code 4:</label>
+        <input type="text" name="course4" required>
+        <br>
+
+        <button style="margin-top: 7px; padding-inline: 20px;">Submit</button>
+        <p id="formconfirmation"></p>
+      </form>
+    </div>
+
+
+    <div class="footer">
+      Open-source project available at <a href="https://github.com/Razpberry/northern-course-tracker" target="_blank" rel="noopener noreferrer">https://github.com/Razpberry/northern-course-tracker</a><br>
+      <div style="margin-top: 5px;">Created by: Nicholas Stakoun</div>
+    </div>
   </body>
 </html>
 
