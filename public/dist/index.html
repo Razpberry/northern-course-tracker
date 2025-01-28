@@ -13,71 +13,75 @@
   <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 </head>
   <body>
-    <br>
-    <div id="all-subjects">
-      <label for="subject-select">Choose a class:</label>
-      <select name="subjects" id="course-select" onchange="getStudents()">
-        <option value="">--Please choose a subject--</option>
-      </select>
+    <div class="text">
+      <div id="all-subjects">
+        <label for="subject-select">Choose a subject:</label>
+        <select name="subjects" id="subject-select" onchange="getCourses()">
+          <option value="">--Please choose a subject--</option>
+          <option value="art">Arts</option>
+          <option value="business">Business</option>
+          <option value="canadianworld">Canadian & World Studies</option>
+          <option value="eng">English</option>
+          <option value="french">French</option>
+          <option value="careers">Civics & Careers</option>
+          <option value="math">Mathematics</option>
+          <option value="physed">Physical Education</option>
+          <option value="sci">Science</option>
+          <option value="tech">Technological Education</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div id="all-courses" style="display:none">
+        <label for="course-select">Choose a class:</label>
+        <select name="courses" id="course-select" onchange="getStudents()">
+          <option value="">--Please choose a class--</option>
+        </select>
+      </div>
+      <br>
+      <div>
+        <h2>Class List:</h2>
+        <p id="class-list">Choose a subject!</p>
+      </div>
+
+      <br>
+
+      <div>
+        <h3 style="margin-bottom: 15px;">Enter your own courses:</h3>
+        <form id="addform">
+          <label for="firstname">First Name:</label>
+          <input type="text" name="firstname" size="14" required>
+          (e.g. Adam)
+          <br>
+          <label for="lastname">Last Name: </label>
+          <input type="text" name="lastname" size="14" required>
+          (e.g. Marshall)
+          <br>
+          <div style="font-weight: 600; font-size: 19px; margin-bottom: 4px; margin-top: 15px;">Include code + section number!</div>
+          <label for="course1">Course Code 1: &NegativeMediumSpace;</label>
+          <input type="text" name="course1" size="13" required>
+          (e.g. MPM2D1-12)
+          <br>
+          <label for="course2">Course Code 2:</label>
+          <input type="text" name="course2" size="13" required>
+          (e.g. ENG2D1-1)
+          <br>
+          <label for="course3">Course Code 3:</label>
+          <input type="text" name="course3" size="13" required>
+          (e.g. HFN2O1-3)
+          <br>
+          <label for="course4">Course Code 4:</label>
+          <input type="text" name="course4" size="13" required>
+          (e.g. SNC2D1-7)
+          <br>
+
+          <button style="margin-top: 8px; padding-inline: 20px;">Submit</button>
+          <p id="formconfirmation"></p>
+        </form>
+      </div>
     </div>
-    <div id="all-courses">
-      <label for="course-select">Choose a class:</label>
-      <select name="courses" id="course-select" onchange="getStudents()">
-        <option value="">--Please choose a class--</option>
-      </select>
-    </div>
-    <br><br>
-    <div>
-      <h2>Class List:</h2>
-      <p id="class-list">Choose a course!</p>
-    </div>
-
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-
-    <div>
-      <h3>Enter your own courses:</h3>
-      <form id="addform">
-        <label for="firstname">First Name:</label>
-        <input type="text" name="firstname" required>
-        (e.g. Adam)
-        <br>
-        <label for="lastname">Last Name:</label>
-        <input type="text" name="lastname" required>
-        (e.g. Marshall)
-        <br>
-        <label for="course1">Course Code 1:</label>
-        <input type="text" name="course1" required>
-        (e.g. MPM2D1-12)
-        <br>
-        <label for="course2">Course Code 2:</label>
-        <input type="text" name="course2" required>
-        (e.g. ENG2D1-1)
-        <br>
-        <label for="course3">Course Code 3:</label>
-        <input type="text" name="course3" required>
-        (e.g. HFN2O1-3)
-        <br>
-        <label for="course4">Course Code 4:</label>
-        <input type="text" name="course4" required>
-        (e.g. SNC2D1-7)
-        <br>
-
-        <button style="margin-top: 7px; padding-inline: 20px;">Submit</button>
-        <p id="formconfirmation"></p>
-      </form>
-    </div>
-
-
     <div class="footer">
       Open-source project available at <a href="https://github.com/Razpberry/northern-course-tracker" target="_blank" rel="noopener noreferrer">https://github.com/Razpberry/northern-course-tracker</a><br>
-      <div style="margin-top: 5px;">Created by: Nicholas Stakoun</div>
+      <div style="margin-top: 4px;">Created by: Nicholas Stakoun &emsp;&emsp; (Feedback to nicholas@stakoun.com)</div>
     </div>
   </body>
 </html>

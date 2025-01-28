@@ -18,26 +18,54 @@ const db = getFirestore()
 const colRefC = collection(db, 'courses')
 const colRefS = collection(db, 'students')
 
-getDocs(colRefC)
-  .then((snapshot) => {
-    let crs = []
-    snapshot.docs.forEach((doc) => {
-      crs.push({ ...doc.data(), id: doc.id})
-    })
 
-    let string = '<option value="">--Please choose a class--</option>'
+window.getCourses = () => {
+  let subject = document.getElementById("subject-select").value;
+  if (subject != '') {
+    document.getElementById("all-courses").style.display = "block"
+    getDocs(colRefC)
+      .then((snapshot) => {
+        let crs = []
+        snapshot.docs.forEach((doc) => {
+          crs.push({ ...doc.data(), id: doc.id})
+        })
 
-    for (let i = 0; i < crs.length; i++) {
-      let id = crs[i].id
-      string += '<option value=' + id + '>' + id + '</option>'
-    }
+        let string = '<option value="">--Please choose a class--</option>'
 
-    document.getElementById("course-select").innerHTML = string
-  })  
-  .catch(err => {
-    console.log(err.message)
-  })
+        for (let i = 0; i < crs.length; i++) {
+          let id = crs[i].id
+          let first = id[0].toLowerCase()
+          let code = id.slice(0, 3)
+          console.log(first, subject[0])
+          if (subject == 'careers') {
+            if (code == 'CIV' || code == 'CHV' || code == 'GLC') {
+              string += '<option value=' + id + '>' + id + '</option>'
+            }
+          }
+          else if (subject == 'other') {
+            if (first != 'a' && first != 'b' && first != 'c' && first != 'e' && first != 'f' && first != 'm' && first != 'p' && first != 's' && first != 't' && code != 'GLC') {
+              string += '<option value=' + id + '>' + id + '</option>'
+            }
+          }
+          else {
+            if (first[0] == subject[0] && !(code == 'CIV' || code == 'CHV' || code == 'GLC')) {
+              string += '<option value=' + id + '>' + id + '</option>'
+            }
+          }
+          
+        }
 
+        document.getElementById("course-select").innerHTML = string
+        document.getElementById("class-list").innerText = 'Choose a course!'
+      })  
+      .catch(err => {
+        console.log(err.message)
+      })
+  } else {
+    document.getElementById("all-courses").style.display = "none"
+    document.getElementById("class-list").innerText = 'Choose a subject!'
+  }
+}
 
 
 window.getStudents = () => {

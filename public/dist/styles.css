@@ -1,8 +1,12 @@
 body {
-  background-color: #1d3d81;
+  background-color: #264a98;
   color: #e5e5e5;
   font-family: "Kanit";
-  margin-left: 5px;
+}
+
+.text {
+  margin-top: 10px;
+  padding-left: 10px;
 }
 
 /* unvisited link */
@@ -28,8 +32,10 @@ a:active {
 .footer {
   position: fixed;
   text-align: center;
-  bottom: 10px;
+  bottom: 0px;
+  padding-block: 8px;
   width: 100%;
+  background-color: #07276b;
 }
 
 /* Kanit Font */
