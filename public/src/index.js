@@ -19,6 +19,117 @@ const colRefC = collection(db, 'courses')
 const colRefS = collection(db, 'students')
 
 
+window.getSearch = () => {
+  let search = document.getElementById("search-select").value;
+
+  if (search == 'course') {
+    document.getElementById("all-courses").style.display = "none"
+    document.getElementById("all-students").style.display = "none"
+    document.getElementById("all-subjects").style.display = "block"
+    document.getElementById("list").innerHTML = "Choose a subject!"
+    document.getElementById("list-text").innerHTML = "Class List:"
+  }
+  else if (search == 'student') {
+    document.getElementById("all-subjects").style.display = "none"
+    document.getElementById("all-courses").style.display = "none"
+    document.getElementById("list").innerHTML = "Choose a student!"
+    document.getElementById("all-students").style.display = "block"
+    document.getElementById("list-text").innerHTML = "Subject List:"
+
+    getDocs(colRefS)
+      .then((snapshot) => {
+        let stds = []
+        snapshot.docs.forEach((doc) => {
+          stds.push({ ...doc.data(), id: doc.id})
+        })
+
+        let string = '<option value="">--Please choose a student--</option>'
+        const set = new Set()
+        let names = []
+
+        for (let i = 0; i < stds.length; i++) {
+          let name = stds[i].firstname + ' ' + stds[i].lastname
+          
+          set.add({id: stds[i].id, name: name})
+          names[i] = name
+        }
+
+        names.sort()
+        let infoSet = []
+
+        for (let i = 0; i < stds.length; i++) {
+          let name = names[i]
+          let valName;
+          valName = name.split(' ')
+          valName = valName.join('_').toLocaleLowerCase()
+  
+          string += '<option value=' + valName + '>' + name + '</option>'
+
+        }
+
+        set.forEach((x) => {
+          infoSet.push(x.id)
+          infoSet.push(x.name.toLocaleLowerCase())
+        });
+
+        document.getElementById("student-select").innerHTML = string
+
+
+        document.getElementById("studentset").innerHTML = infoSet
+      })
+
+  }
+  else {
+    document.getElementById("all-subjects").style.display = "none"
+    document.getElementById("all-courses").style.display = "none"
+    document.getElementById("list").innerHTML = "Choose what to search by!"
+  }
+}
+
+window.getStdClasses = () => {
+  let student = document.getElementById("student-select").value.split('_');
+  let list = document.getElementById("studentset").innerHTML.split(',')
+
+  let first = student[0]
+  let last = student[1]
+  let code;
+
+  // Find student id
+  for (let i = 0; i < list.length; i++) {
+    let full = student.join(' ')
+    if (list[i] == full) {
+      code = list[i - 1];
+      break;
+    }
+  }
+
+  // Get courses from db using id
+  getDocs(colRefS)
+      .then((snapshot) => {
+        let stds = []
+        snapshot.docs.forEach((doc) => {
+          stds.push({ ...doc.data(), id: doc.id})
+        })
+
+        for (let i = 0; i < stds.length; i++) {
+          if (code == stds[i].id) {
+            let crs = stds[i].courses
+            let string = ''
+
+            for (let j = 0; j < crs.length; j++) {
+              string += crs[j] + '\n'
+            }
+            
+            document.getElementById("list").innerText = string
+            break;
+          }
+        }
+      })  
+      .catch(err => {
+        console.log(err.message)
+      })
+}
+
 window.getCourses = () => {
   let subject = document.getElementById("subject-select").value;
   if (subject != '') {
@@ -43,7 +154,7 @@ window.getCourses = () => {
             }
           }
           else if (subject == 'other') {
-            if (first != 'a' && first != 'b' && first != 'c' && first != 'e' && first != 'f' && first != 'm' && first != 'p' && first != 's' && first != 't' && code != 'GLC') {
+            if (first != 'a' && first != 'b' && first != 'c' && first != 'e' && first != 'f' && first != 'l' && first != 'm' && first != 'p' && first != 's' && first != 't' && code != 'GLC') {
               string += '<option value=' + id + '>' + id + '</option>'
             }
           }
@@ -52,23 +163,25 @@ window.getCourses = () => {
               string += '<option value=' + id + '>' + id + '</option>'
             }
           }
+
+          //TODO: add NBE to english and NAC to art
           
         }
 
         document.getElementById("course-select").innerHTML = string
-        document.getElementById("class-list").innerText = 'Choose a course!'
+        document.getElementById("list").innerText = 'Choose a course!'
       })  
       .catch(err => {
         console.log(err.message)
       })
   } else {
     document.getElementById("all-courses").style.display = "none"
-    document.getElementById("class-list").innerText = 'Choose a subject!'
+    document.getElementById("list").innerText = 'Choose a subject!'
   }
 }
 
 
-window.getStudents = () => {
+window.getCrsStudents = () => {
   let allCourses = []
   let studentIds = []
   let courseName = document.getElementById("course-select").value;
@@ -112,7 +225,7 @@ window.getStudents = () => {
             }
           }
           
-          document.getElementById("class-list").innerText = string
+          document.getElementById("list").innerText = string
 
         })  
         .catch(err => {
@@ -152,27 +265,26 @@ window.onload = () => {
       }
 
       // Alter common mistakes
-      else {
 
-        // 5th character 0 instead of O
-        if (course[4] == '0') {
+      // 5th character 0 instead of O
+      if (course[4] == '0') {
+        let str = course.split('');
+        str[4] = 'O';
+        course = str.join('');
+        crs[i] = course
+      }
+
+      // Course code to uppercase
+      for (let j = 0; j < course.length; j++) {
+        let code = course.charCodeAt(j)
+
+        if (code >= 97 && code <= 122) {
           let str = course.split('');
-          str[4] = 'O';
+          code -= 32
+
+          str[j] = String.fromCharCode(code);
           course = str.join('');
-        }
-
-        // Course code to uppercase
-        for (let j = 0; j < course.length; j++) {
-          let code = course.charCodeAt(j)
-
-          if (code >= 97 && code <= 122) {
-            let str = course.split('');
-            code -= 32
-
-            str[j] = String.fromCharCode(code);
-            course = str.join('');
-            crs[i] = course
-          }
+          crs[i] = course
         }
       }
     }
