@@ -17,7 +17,7 @@
   <body>
     <br>
     <div id="all-courses">
-      <label for="course-select">Choose a course:</label>
+      <label for="course-select">Choose a class:</label>
       <select name="courses" id="course-select" onchange="getStudents()">
         <option value="">--Please choose a class--</option>
       </select>
@@ -25,7 +25,7 @@
     <br><br>
     <div>
       <h2>Class List:</h2>
-      <p id="class-list">Choose a class!</p>
+      <p id="class-list">Choose a course!</p>
     </div>
 
 
@@ -43,21 +43,27 @@
       <form id="addform">
         <label for="firstname">First Name:</label>
         <input type="text" name="firstname" required>
+        (e.g. Adam)
         <br>
         <label for="lastname">Last Name:</label>
         <input type="text" name="lastname" required>
+        (e.g. Marshall)
         <br>
         <label for="course1">Course Code 1:</label>
         <input type="text" name="course1" required>
+        (e.g. MPM2D1-12)
         <br>
         <label for="course2">Course Code 2:</label>
         <input type="text" name="course2" required>
+        (e.g. ENG2D1-1)
         <br>
         <label for="course3">Course Code 3:</label>
         <input type="text" name="course3" required>
+        (e.g. HFN2O1-3)
         <br>
         <label for="course4">Course Code 4:</label>
         <input type="text" name="course4" required>
+        (e.g. SNC2D1-7)
         <br>
 
         <button style="margin-top: 7px; padding-inline: 20px;">Submit</button>

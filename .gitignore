@@ -69,3 +69,7 @@ node_modules/
 
 # dataconnect generated files
 .dataconnect
+
+# mac
+.DS_Store
+public/.DS_Store
