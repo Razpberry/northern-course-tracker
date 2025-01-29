@@ -23,6 +23,7 @@ window.getSearch = () => {
   let search = document.getElementById("search-select").value;
 
   if (search == 'course') {
+    document.getElementById("subject-select").value = ""
     document.getElementById("all-courses").style.display = "none"
     document.getElementById("all-students").style.display = "none"
     document.getElementById("all-subjects").style.display = "block"
@@ -34,7 +35,7 @@ window.getSearch = () => {
     document.getElementById("all-courses").style.display = "none"
     document.getElementById("list").innerHTML = "Choose a student!"
     document.getElementById("all-students").style.display = "block"
-    document.getElementById("list-text").innerHTML = "Subject List:"
+    document.getElementById("list-text").innerHTML = "Course List:"
 
     getDocs(colRefS)
       .then((snapshot) => {
@@ -80,9 +81,12 @@ window.getSearch = () => {
 
   }
   else {
+    document.getElementById("all-students").style.display = "none"
     document.getElementById("all-subjects").style.display = "none"
     document.getElementById("all-courses").style.display = "none"
     document.getElementById("list").innerHTML = "Choose what to search by!"
+
+    // TODO: Clear student after changing from student to course search
   }
 }
 
@@ -182,6 +186,9 @@ window.getCourses = () => {
 
 
 window.getCrsStudents = () => {
+
+  // TODO: Output class list SORTED 
+
   let allCourses = []
   let studentIds = []
   let courseName = document.getElementById("course-select").value;
@@ -241,6 +248,8 @@ window.onload = () => {
   const addStudentForm = document.getElementById('addform')
   let id = ''
 
+  // TODO: Prevent person duplication
+
   addStudentForm.addEventListener('submit', (e) => {
     e.preventDefault()
     let crs = [
@@ -250,6 +259,8 @@ window.onload = () => {
       addStudentForm.course4.value
     ]
     
+    // TODO: Ensure full first and last name; prevent one letter last initial's (e.g. Nicholas S)
+
     // Course input error catching
     for (let i = 0; i < crs.length; i++) {
       let course = crs[i]
@@ -332,6 +343,8 @@ window.onload = () => {
             }
           }
         })
+
+        // TODO: Refresh after submission
 
         addStudentForm.reset()
     })
