@@ -85,8 +85,6 @@ window.getSearch = () => {
     document.getElementById("all-subjects").style.display = "none"
     document.getElementById("all-courses").style.display = "none"
     document.getElementById("list").innerHTML = "Choose what to search by!"
-
-    // TODO: Clear student after changing from student to course search
   }
 }
 
@@ -260,6 +258,8 @@ window.onload = () => {
     ]
     
     // TODO: Ensure full first and last name; prevent one letter last initial's (e.g. Nicholas S)
+
+    // TODO: Ensure capatalization of names (e.g. nicholas stakoun -> Nicholas Stakoun)
 
     // Course input error catching
     for (let i = 0; i < crs.length; i++) {

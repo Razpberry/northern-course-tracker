@@ -19,7 +19,7 @@
     <div class="text">
       <div>
         <label>Search by student or course:</label>
-        <select name="search" id="search-select" onchange="getSearch()">
+        <select name="search" id="search-select" onchange="getSearch(document.getElementById('search-select').value)">
           <option value="">--Please choose an option--</option>
           <option value="student">Student</option>
           <option value="course">Course</option>
@@ -64,7 +64,7 @@
 
       <br>
 
-      <div>
+      <div style="position: absolutez;">
         <h3 style="margin-bottom: 15px;">Enter your own courses:</h3>
         <form id="addform" onfocusout="event.target.value = event.target.value.trim();">
           <label for="firstname">First Name:</label>
@@ -101,10 +101,19 @@
         </form>
       </div>
     </div>
-    <div class="footer">
-      Open-source project available at <a href="https://github.com/Razpberry/northern-course-tracker" target="_blank" rel="noopener noreferrer">https://github.com/Razpberry/northern-course-tracker</a><br>
-      <div style="margin-top: 4px;">Created by: Nicholas Stakoun &emsp;&emsp; (Feedback to nicholas@stakoun.com)</div>
-    </div>
+
+    <!-- Change footer by removing link and simply putting a clickable github icon -->
+
+    <footer class="footer">
+      <!-- Open-source project available at <a href="https://github.com/Razpberry/northern-course-tracker" target="_blank" rel="noopener noreferrer">https://github.com/Razpberry/northern-course-tracker</a><br> -->
+      <div style="display: flex; justify-content: center; align-items: center; gap: 3%;">
+        <p style="margin-bottom: 0;">Open-source project created by Nicholas Stakoun</p>
+        <a href="https://github.com/Razpberry/northern-course-tracker" target="_blank" rel="noopener noreferrer">
+          <img src="assets/github-light.png" height="25" width ="25">
+        </a>
+        <p style="margin-bottom: 0;">(Feedback to nicholas@stakoun.com)</p>
+      </div>
+    </footer>
   </body>
 </html>
 
