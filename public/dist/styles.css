@@ -23,7 +23,7 @@ body {
 
 .navbar-brand {
   margin-left: 15px;
-  margin-right: 25px;
+  margin-right: 15px;
   color: #e5e5e5;
 }
 
@@ -33,6 +33,10 @@ body {
 
 .navbar-brand:focus {
   color: #cbd5f5;
+}
+
+.navbar-nav {
+  padding-left: 15px;
 }
 
 .nav-item {
