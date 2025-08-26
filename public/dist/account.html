@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Northern Course Tracker</title>
+    <link rel="icon" type="image/x-icon" href="./assets/Classroom Icon - Blackboard.png">
+    <script src="bundle.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="accountid" style="display:none"></div>
+    <nav class="navbar navbar-light">
+      <a class="navbar-brand" href="index.html" style="font-weight: 550;">
+        <img style="margin-right: 5px;" src="/public/dist/assets/Northern Secondary School Crest.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        Northern Course Tracker
+      </a>
+      <ul class="navbar-nav me-auto flex-row">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="account.html">Account</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="text">
+      <p>
+        Your Account
+      </p>
+      <div id="account-first">Your First Name: ---</div>
+      <div id="account-last">Your Last Name: ---</div>
+      <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Enter Login</h5>
+                </div>
+                
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <form id="loginModalForm">
+                        <div class="mb-3">
+                            <label for="emailFieldL" class="form-label">Student TDSB Email</label>
+                            <input type="text" class="form-control" id="emailFieldL" placeholder="E.g. adam.marshall@student.tdsb.on.ca">
+                        </div>
+                        <div class="mb-3">
+                            <label for="passwordFieldL" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="passwordFieldL" placeholder="E.g. NorthernKnights123">
+                        </div>
+                    </form>
+                    <div id="modalL-err-msg"></div>
+                </div>
+                
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="saveButton" style="position: absolute; left: 10px;" onclick="toSignUpClick()">Sign Up</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="location.href='index.html'">Back to Home</button>
+                    <button type="button" class="btn btn-primary" id="saveButton" onclick="loginClick()">Login</button>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="modal fade" id="signUpModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Enter Sign Up</h5>
+                </div>
+                
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <form id="signUpModalForm">
+                      <div class="mb-3">
+                            <label for="firstField" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstField" placeholder="Adam" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lastField" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastField" placeholder="Marshall" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="emailFieldS" class="form-label">Student TDSB Email</label>
+                            <input type="text" class="form-control" id="emailFieldS" placeholder="E.g. adam.marshall@student.tdsb.on.ca" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="passwordFieldS" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="passwordFieldS" placeholder="E.g. NorthernKnights123" required>
+                        </div>
+                    </form>
+                    <div id="modalS-err-msg"></div>
+                </div>
+                
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="saveButton" style="position: absolute; left: 10px;" onclick="toLoginClick()">Login</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="location.href='index.html'">Back to Home</button>
+                    <button type="button" class="btn btn-primary" id="saveButton" onclick="signUpClick()">Sign Up</button>
+                </div>
+            </div>
+        </div>
+      </div>
+      <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#coursesModal" style="margin-bottom: 20px; margin-top: 10px;">
+        Edit Courses
+      </button>
+      <div class="modal fade" id="coursesModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="true" data-bs-keyboard="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            
+            <!-- Modal Header -->
+              <div class="modal-header">
+                  <h5 class="modal-title" id="modalLabel">Enter Your Semester 1 Courses</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+            
+            <!-- Modal Body -->
+              <div class="modal-body">
+                  <form id="signUpModalForm">
+                      <div class="mb-3">
+                          <label for="courseField1" class="form-label">Course Code 1</label>
+                          <input type="text" class="form-control" id="courseField1" placeholder="MPM2D1-12" required>
+                      </div>
+                      <div class="mb-3">
+                          <label for="courseField2" class="form-label">Course Code 2</label>
+                          <input type="text" class="form-control" id="courseField2" placeholder="ENG2D1-1" required>
+                      </div>
+                      <div class="mb-3">
+                          <label for="courseField3" class="form-label">Course Code 3</label>
+                          <input type="text" class="form-control" id="courseField3" placeholder="HFN2O1-3" required>
+                      </div>
+                      <div class="mb-3">
+                          <label for="courseField4" class="form-label">Course Code 4</label>
+                          <input type="text" class="form-control" id="courseField4" placeholder="SNC2D1-7" required>
+                      </div>
+                  </form>
+              </div>
+            
+            <!-- Modal Footer -->
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-primary" id="saveButton" onclick="updateCourses()">Save Changes</button>
+              </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div style="position: absolutez;">
+        <h3 style="margin-bottom: -10px;">Enter your own courses:</h3>
+        <form id="addform" onfocusout="event.target.value = event.target.value.trim();"> -->
+          <!-- TODO: Bootstrap name input styling? -->
+          <!-- <div style="font-weight: 400; font-size: 19px; margin-bottom: 4px; margin-top: 15px;">Include code + section number!</div>
+          <label for="course1">Course Code 1: &NegativeMediumSpace;</label>
+          <input type="text" name="course1" size="13" required>
+          (e.g. MPM2D1-12)
+          <br>
+          <label for="course2">Course Code 2:</label>
+          <input type="text" name="course2" size="13" required>
+          (e.g. ENG2D1-1)
+          <br>
+          <label for="course3">Course Code 3:</label>
+          <input type="text" name="course3" size="13" required>
+          (e.g. HFN2O1-3)
+          <br>
+          <label for="course4">Course Code 4:</label>
+          <input type="text" name="course4" size="13" required>
+          (e.g. SNC2D1-7)
+          <br>
+
+          <button style="margin-top: 8px; padding-inline: 20px;">Submit</button>
+          <p id="formconfirmation"></p>
+        </form>
+      </div> -->
+      <div>
+        <button id="signOutBtn" class="btn btn-secondary" onclick="signOutUser()">
+          Sign Out
+        </button>
+      </div>
+    </div>
+    <footer class="footer">
+      <!-- Open-source project available at <a href="https://github.com/Razpberry/northern-course-tracker" target="_blank" rel="noopener noreferrer">https://github.com/Razpberry/northern-course-tracker</a><br> -->
+      <div style="display: flex; justify-content: center; align-items: center; gap: 3%;">
+        <p style="margin-bottom: 0;">Open-source project created by Nicholas Stakoun</p>
+        <a href="https://github.com/Razpberry/northern-course-tracker" target="_blank" rel="noopener noreferrer">
+          <img src="assets/github-light.png" height="25" width ="25">
+        </a>
+        <p style="margin-bottom: 0;">(Feedback to nicholas@stakoun.com)</p>
+      </div>
+    </footer>
+  </body>
+</html>

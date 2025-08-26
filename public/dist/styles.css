@@ -17,25 +17,76 @@ body {
   padding-left: 10px;
 }
 
-/* unvisited link */
-a:link {
-  color: rgb(255, 229, 134);
+.navbar {
+  background-color: #07276b;
 }
+
+.navbar-brand {
+  margin-left: 15px;
+  margin-right: 25px;
+  color: #e5e5e5;
+}
+
+.navbar-brand:hover {
+  color: #cbd5f5;
+}
+
+.navbar-brand:focus {
+  color: #cbd5f5;
+}
+
+.nav-item {
+  padding-right: 20px;
+}
+
+.nav-link {
+  color: #e5e5e5;
+}
+
+.nav-link:hover {
+  color: #cbd5f5;
+}
+
+.nav-link:focus {
+  color: #cbd5f5;
+}
+
+.modal-dialog {
+  color: #07276b;
+}
+
+.btn-primary {
+  background-color: #244eab;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #1e4393;
+}
+
+/* unvisited link */
+/* a:link {
+  color: rgb(255, 229, 134);
+} */
 
 /* visited link */
-a:visited {
+/* a:visited {
   color: rgb(255, 229, 134);
-}
+} */
 
 /* mouse over link */
-a:hover {
+/* a:hover {
   color: rgb(255, 229, 134);
-}
+} */
 
 /* selected link */
-a:active {
+/* a:active {
   color: rgb(255, 229, 134);
-}
+} */
+
+/* .signOutBtn {
+
+} */
 
 .footer {
   text-align: center;

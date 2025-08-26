@@ -1,23 +1,49 @@
+/*
+HOW TO RUN BACKEND:
+
+Cd into /public/src
+Run "npm run build"
+*/
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 // initializeApp = require('firebase/app');
 import { getAnalytics, setAnalyticsCollectionEnabled } from "firebase/analytics";
 // getAnalytics = require('firebase/analytics');
-import { getFirestore, collection, doc, setDoc, getDocs, addDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { getFirestore, collection, doc, setDoc, getDocs, getDoc, addDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 // getFirestore = require('firebase/firestore');
+
+// Authentication imports
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 // Your web app's Firebase configuration
 import { firebaseConfig } from './config'
+  
+// Bootstrap imports
+import * as bootstrap from 'bootstrap';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
+// Initialize Firebase Authentication and get a reference to the service
+const auth = getAuth();
+
 // init firestore database
 const db = getFirestore()
-const colRefC = collection(db, 'courses')
-const colRefS = collection(db, 'students')
+const colRefCText = 'semesters/26-1/courses'
+const colRefSText = 'semesters/26-1/students'
+const colRefC = collection(db, colRefCText)
+const colRefS = collection(db, colRefSText)
 
+window.addEventListener('DOMContentLoaded', function() {
+  loadUserInfo()
+
+  if (!getCookie('userId')) {
+    const loginModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('loginModal'));
+    loginModal.show();
+  }
+});
 
 window.getSearch = () => {
   let search = document.getElementById("search-select").value;
@@ -306,7 +332,7 @@ window.onload = () => {
       courses: crs
     })
     .then((docRef) => {
-      document.getElementById("formconfirmation").innerText = 'Submitted! Thank you!'
+      document.getElementById("formconfirmation").innerText = 'Submitted! Thank you! Please refresh the page to see updates'
       id = docRef.id
 
       getDocs(colRefC)
@@ -318,13 +344,12 @@ window.onload = () => {
 
           for (let i = 0; i < crs.length; i++) {
             let found = false;
+            let path = colRefCText + '/' + crs[i]
+            let ref = doc(db, path)
 
             for (let j = 0; j < allCrs.length; j++) {
               if (crs[i] == allCrs[j].id) {
                 found = true;
-              
-                let path = 'courses/' + crs[i]
-                let ref = doc(db, path)
                 updateDoc(ref, {
                   students: arrayUnion(id)
                 })
@@ -333,8 +358,6 @@ window.onload = () => {
               }
             }
             if (!found) {
-              let path = 'courses/' + crs[i]
-              let ref = doc(db, path)
               setDoc(ref, {
                 students: [
                   id
@@ -352,4 +375,352 @@ window.onload = () => {
       console.log(err.message)
     })
   })
+}
+
+
+window.loginClick = () => {
+  signIn(document.getElementById("emailFieldL").value, document.getElementById("passwordFieldL").value)
+}
+
+window.toSignUpClick = () => {
+  const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
+  loginModal.hide();
+  const signUpModal = new bootstrap.Modal(document.getElementById('signUpModal'));
+  signUpModal.show();
+}
+
+window.signUpClick = () => {
+  signUp(document.getElementById("emailFieldS").value, document.getElementById("passwordFieldS").value)
+}
+
+window.toLoginClick = () => {
+  const signUpModal = bootstrap.Modal.getInstance(document.getElementById('signUpModal'));
+  signUpModal.hide();
+  const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+  loginModal.show();
+}
+
+// --- Sign up a new user ---
+window.signUp = async (email, password) => {
+  try {
+    if (!email.endsWith('@student.tdsb.on.ca')) {
+      const errorTxt = "Only @student.tdsb.on.ca emails are allowed";
+      document.getElementById("modalS-err-msg").innerHTML = errorTxt;
+      return;
+    }
+
+    // Create user account
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    
+    // Add user data to Firestore
+    const docRef = await addDoc(colRefS, {
+      firstname: document.getElementById("firstField").value,
+      lastname: document.getElementById("lastField").value,
+      email: email,
+      password: password,
+      courses: []
+    });
+
+    document.cookie = `userId=${docRef.id}`;
+    console.log(document.cookie)
+    console.log("Signed up:", user.email);
+    window.location.href = "account.html"
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    const errorTxt = "Sign-up failed: " + errorCode;
+    document.getElementById("modalS-err-msg").innerHTML = errorTxt;
+    console.error("Sign-up failed:", errorCode, errorMessage);
+  }
+}
+
+// --- Sign in an existing user ---
+window.signIn = async (email, password) => {
+  try {
+    // Sign in the user
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    
+    // Find the user's document in Firestore using their email
+    const snapshot = await getDocs(colRefS);
+    let userDocId = null;
+    let userData = null;
+    
+    snapshot.docs.forEach((doc) => {
+      const data = doc.data();
+      if (data.email === email) {
+        userDocId = doc.id;
+        userData = data;
+      }
+    });
+    
+    if (userDocId && userData) {
+      // Set the userId cookie
+      document.cookie = `userId=${userDocId}`;
+      
+      // Update UI elements if they exist
+      loadUserInfo()
+      
+      console.log("Signed in:", user.email);
+      console.log("User cookie set:", document.cookie);
+      
+      // Hide login modal
+      const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
+      if (loginModal) {
+        loginModal.hide();
+      }
+      
+    } else {
+      throw new Error("User data not found in database");
+    }
+    
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    const errorTxt = "Sign-in failed: " + errorCode;
+    
+    const errorElement = document.getElementById("modalL-err-msg");
+    if (errorElement) {
+      errorElement.innerHTML = errorTxt;
+    }
+    
+    console.error("Sign-in failed:", errorCode, errorMessage);
+  }
+}
+
+// Example usage
+// signUp("newuser@example.com", "my_secret_password");
+// signIn("existinguser@example.com", "my_secret_password");
+
+window.signOutUser = async () => {
+  try {
+    // Clear the userId cookie
+    document.cookie = 'userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/public;';
+    document.cookie = 'userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/public/;';
+    document.cookie = 'userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+
+    await signOut(auth);
+    
+    
+    console.log("User signed out successfully");
+    
+    // Show login modal again
+    // const loginModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('loginModal'), {
+    //   backdrop: 'static',
+    //   keyboard: false
+    // });
+    // loginModal.show();
+    
+    // redirect to main page
+    window.location.href = 'index.html';
+    
+  } catch (error) {
+    console.error('Sign out error:', error);
+    alert('Error signing out. Please try again.');
+  }
+}
+
+
+window.updateCourses = async () => {
+  let crs = [
+    document.getElementById("courseField1").value, 
+    document.getElementById("courseField2").value, 
+    document.getElementById("courseField3").value, 
+    document.getElementById("courseField4").value
+  ]
+  
+  // TODO: Ensure full first and last name; prevent one letter last initial's (e.g. Nicholas S)
+
+  // TODO: Ensure capatalization of names (e.g. nicholas stakoun -> Nicholas Stakoun)
+
+  // Course input error catching
+  for (let i = 0; i < crs.length; i++) {
+    let course = crs[i]
+
+    // Ensure proper formatting
+    if (
+      (course.length != 8 && course.length != 9)
+      || course[6] != '-'
+    ) {
+      // document.getElementById("formconfirmation").innerText = 'Error submitting... Try again!'
+      alert('Make sure your courses have the proper code + section number! \n \n Courses should look like MPM2D1-12 or ENG2D1-1')
+      return 1;
+    }
+
+    // Alter common mistakes
+
+    // 5th character 0 instead of O
+    if (course[4] == '0') {
+      let str = course.split('');
+      str[4] = 'O';
+      course = str.join('');
+      crs[i] = course
+    }
+
+    // Course code to uppercase
+    for (let j = 0; j < course.length; j++) {
+      let code = course.charCodeAt(j)
+
+      if (code >= 97 && code <= 122) {
+        let str = course.split('');
+        code -= 32
+
+        str[j] = String.fromCharCode(code);
+        course = str.join('');
+        crs[i] = course
+      }
+    }
+  }
+
+  let uid = getCookie("userId");
+  let colRefSTemp = colRefSText + '/' + uid
+  let tempSRef = doc(db, colRefSTemp)
+
+  try {
+    const userDoc = await getDoc(tempSRef)
+    const oldCourses = userDoc.data().courses || []
+
+    const removePromises = []
+
+    for (const oldCourse of oldCourses) {
+      const courseRef = doc(db, colRefCText + '/' + oldCourse)
+      removePromises.push(
+        updateDoc(courseRef, {
+          students: arrayRemove(uid)
+        }).catch((error) => {
+          console.log(`Course ${oldCourse} not found, skipping removal`)
+        })
+      )
+    }
+
+    await Promise.all(removePromises)
+
+    await updateDoc(tempSRef, {
+      // firstname: addStudentForm.firstname.value,
+      // lastname: addStudentForm.lastname.value,
+      courses: crs
+    })
+  
+    // document.getElementById("formconfirmation").innerText = 'Submitted! Thank you! Please refresh the page to see updates'
+    const snapshot = await getDocs(colRefC)
+    let allCrs = []
+    snapshot.docs.forEach((doc) => {
+      allCrs.push({ ...doc.data(), id: doc.id})
+    })
+
+    // TODO Remove student from all previous courses
+
+    for (let i = 0; i < crs.length; i++) {
+      let found = false;
+      let path = colRefCText + '/' + crs[i]
+      let ref = doc(db, path)
+
+      for (let j = 0; j < allCrs.length; j++) {
+        if (crs[i] == allCrs[j].id) {
+          found = true;
+          await updateDoc(ref, {
+            students: arrayUnion(uid)
+          })
+
+          break;
+        }
+      }
+      if (!found) {
+        await setDoc(ref, {
+          students: [
+            uid
+          ]
+        })
+      }
+    }
+
+    // TODO: Refresh after submission
+
+    // addStudentForm.reset()
+    const coursesModal = bootstrap.Modal.getInstance(document.getElementById('coursesModal'));
+    if (coursesModal) {
+      coursesModal.hide();
+      
+      // Wait for hide animation to complete before disposing
+      document.getElementById('coursesModal').addEventListener('hidden.bs.modal', function() {
+        coursesModal.dispose();
+        cleanupModalBackdrops();
+
+        window.location.href = 'index.html';
+      }, { once: true });
+    }
+  }
+  catch (error) {
+    console.log('Error updating courses:', error.message);
+  }
+}
+
+function getCookie(name) {
+    let value = "; " + document.cookie;
+    let parts = value.split("; " + name + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
+}
+
+async function loadUserInfo() {
+  const userId = getCookie('userId');
+  if (!userId) return;
+  try {
+    const snapshot = await getDocs(colRefS);
+    
+    snapshot.docs.forEach((doc) => {
+      if (doc.id === userId) {
+        const user = doc.data();
+
+        // Show Courses Modal if no courses have been selected
+        if (!user.courses || user.courses.length === 0) {
+          const coursesModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('coursesModal'));
+          if (coursesModal && document.getElementById('coursesModal')) {
+            coursesModal.show();
+          }
+        }
+        
+        // Update page elements if they exist
+        if (document.getElementById("account-first")) {
+          document.getElementById("account-first").innerHTML = `Your First Name: ${user.firstname}`;
+        }
+        if (document.getElementById("account-last")) {
+          document.getElementById("account-last").innerHTML = `Your Last Name: ${user.lastname}`;
+        }
+        
+        // Fill course fields if they exist
+        if (user.courses) {
+          for (let i = 0; i < 4; i++) {
+            const field = document.getElementById(`courseField${i+1}`);
+            if (field && user.courses[i]) {
+              field.value = user.courses[i];
+            }
+          }
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Error loading user:', error);
+  }
+}
+
+window.cleanupModalBackdrops = () => {
+  setTimeout(() => {
+    // Only remove orphaned backdrops, not ones with active modals
+    document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+      const activeModals = document.querySelectorAll('.modal.show');
+      if (activeModals.length === 0) {
+        backdrop.remove();
+      }
+    });
+    
+    // Only reset body if no active modals
+    const activeModals = document.querySelectorAll('.modal.show');
+    if (activeModals.length === 0) {
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    }
+  }, 300);
 }

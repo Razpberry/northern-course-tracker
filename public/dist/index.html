@@ -1,3 +1,10 @@
+<!-- 
+HOW TO RUN FRONTEND:
+
+Run liveserver and ensure it is running inside /public/dist
+MAKE SURE TO RUN WEBPACK AS WELL OR ELSE JS CHANGES WILL NOT APPEAR
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,89 +23,142 @@
   <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 </head>
   <body>
+    <nav class="navbar navbar-light">
+      <a class="navbar-brand" href="index.html" style="font-weight: 550;">
+        <img style="margin-right: 5px;" src="/public/dist/assets/Northern Secondary School Crest.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        Northern Course Tracker
+      </a>
+      <ul class="navbar-nav me-auto flex-row">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="account.html">Account</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Enter Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <form id="loginModalForm">
+                        <div class="mb-3">
+                            <label for="emailFieldL" class="form-label">Student TDSB Email</label>
+                            <input type="text" class="form-control" id="emailFieldL" placeholder="E.g. adam.marshall@student.tdsb.on.ca">
+                        </div>
+                        <div class="mb-3">
+                            <label for="passwordFieldL" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="passwordFieldL" placeholder="E.g. NorthernKnights123">
+                        </div>
+                    </form>
+                    <div id="modalL-err-msg"></div>
+                </div>
+                
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="saveButton" style="position: absolute; left: 10px;" onclick="toSignUpClick()">Sign Up</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveButton" onclick="loginClick()">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="signUpModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Enter Sign Up</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <form id="signUpModalForm">
+                      <div class="mb-3">
+                            <label for="firstField" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstField" placeholder="Adam" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lastField" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastField" placeholder="Marshall" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="emailFieldS" class="form-label">Student TDSB Email</label>
+                            <input type="text" class="form-control" id="emailFieldS" placeholder="E.g. adam.marshall@student.tdsb.on.ca" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="passwordFieldS" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="passwordFieldS" placeholder="E.g. NorthernKnights123" required>
+                        </div>
+                    </form>
+                    <div id="modalS-err-msg"></div>
+                </div>
+                
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="saveButton" style="position: absolute; left: 10px;" onclick="toLoginClick()">Login</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveButton" onclick="signUpClick()">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="text">
-      <div>
-        <label>Search by student or course:</label>
-        <select name="search" id="search-select" onchange="getSearch(document.getElementById('search-select').value)">
-          <option value="">--Please choose an option--</option>
-          <option value="student">Student</option>
-          <option value="course">Course</option>
-        </select>
+      <div id="selects">
+        <div class="mb-2">
+          <label>Search by student or course:</label>
+          <select name="search" id="search-select" onchange="getSearch(document.getElementById('search-select').value)">
+            <option value="">--Please choose an option--</option>
+            <option value="student">Student</option>
+            <option value="course">Course</option>
+          </select>
+        </div>
+        <div class="mb-2" id="all-subjects" style="display:none">
+          <label for="subject-select">Choose a subject:</label>
+          <select name="subjects" id="subject-select" onchange="getCourses()">
+            <option value="">--Please choose a subject--</option>
+            <option value="art">Arts</option>
+            <option value="business">Business</option>
+            <option value="canadianworld">Canadian & World Studies</option>
+            <option value="eng">English</option>
+            <option value="french">French</option>
+            <option value="careers">Civics & Careers</option>
+            <option value="langs">International Languages</option>
+            <option value="math">Mathematics</option>
+            <option value="physed">Physical Education</option>
+            <option value="sci">Science</option>
+            <option value="tech">Technological Education</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div id="studentset" style="display:none"></div>
+        <div class="mb-2" id="all-students" style="display:none">
+          <label for="student-select">Choose a student:</label>
+          <select name="students" id="student-select" onchange="getStdClasses()">
+            <option value="">--Please choose a student--</option>
+          </select>
+        </div>
+        <div id="all-courses" style="display:none">
+          <label for="course-select">Choose a class:</label>
+          <select name="courses" id="course-select" onchange="getCrsStudents()">
+            <option value="">--Please choose a class--</option>
+          </select>
+        </div>
+        <br>
       </div>
-      <div id="all-subjects" style="display:none">
-        <label for="subject-select">Choose a subject:</label>
-        <select name="subjects" id="subject-select" onchange="getCourses()">
-          <option value="">--Please choose a subject--</option>
-          <option value="art">Arts</option>
-          <option value="business">Business</option>
-          <option value="canadianworld">Canadian & World Studies</option>
-          <option value="eng">English</option>
-          <option value="french">French</option>
-          <option value="careers">Civics & Careers</option>
-          <option value="langs">International Languages</option>
-          <option value="math">Mathematics</option>
-          <option value="physed">Physical Education</option>
-          <option value="sci">Science</option>
-          <option value="tech">Technological Education</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
-      <div id="studentset" style="display:none"></div>
-      <div id="all-students" style="display:none">
-        <label for="student-select">Choose a student:</label>
-        <select name="students" id="student-select" onchange="getStdClasses()">
-          <option value="">--Please choose a student--</option>
-        </select>
-      </div>
-      <div id="all-courses" style="display:none">
-        <label for="course-select">Choose a class:</label>
-        <select name="courses" id="course-select" onchange="getCrsStudents()">
-          <option value="">--Please choose a class--</option>
-        </select>
-      </div>
-      <br>
       <div>
         <h2 id="list-text">Course List:</h2>
         <p id="list">Choose what to search by!</p>
-      </div>
-
-      <br>
-
-      <div style="position: absolutez;">
-        <h3 style="margin-bottom: 15px;">Enter your own courses:</h3>
-        <form id="addform" onfocusout="event.target.value = event.target.value.trim();">
-          <label for="firstname">First Name:</label>
-          <input type="text" name="firstname" size="14" required>
-          (e.g. Adam)
-          <br>
-          <label for="lastname">Last Name: </label>
-          <input type="text" name="lastname" size="14" required>
-          (e.g. Marshall)
-          <br>
-
-          <!-- TODO: Bootstrap name input styling? -->
-
-          <div style="font-weight: 600; font-size: 19px; margin-bottom: 4px; margin-top: 15px;">Include code + section number!</div>
-          <label for="course1">Course Code 1: &NegativeMediumSpace;</label>
-          <input type="text" name="course1" size="13" required>
-          (e.g. MPM2D1-12)
-          <br>
-          <label for="course2">Course Code 2:</label>
-          <input type="text" name="course2" size="13" required>
-          (e.g. ENG2D1-1)
-          <br>
-          <label for="course3">Course Code 3:</label>
-          <input type="text" name="course3" size="13" required>
-          (e.g. HFN2O1-3)
-          <br>
-          <label for="course4">Course Code 4:</label>
-          <input type="text" name="course4" size="13" required>
-          (e.g. SNC2D1-7)
-          <br>
-
-          <button style="margin-top: 8px; padding-inline: 20px;">Submit</button>
-          <p id="formconfirmation"></p>
-        </form>
       </div>
     </div>
 
