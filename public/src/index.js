@@ -274,107 +274,107 @@ window.onload = () => {
 
   // TODO: Prevent person duplication
 
-  addStudentForm.addEventListener('submit', (e) => {
-    e.preventDefault()
-    let crs = [
-      addStudentForm.course1.value, 
-      addStudentForm.course2.value, 
-      addStudentForm.course3.value, 
-      addStudentForm.course4.value
-    ]
+  // addStudentForm.addEventListener('submit', (e) => {
+  //   e.preventDefault()
+  //   let crs = [
+  //     addStudentForm.course1.value, 
+  //     addStudentForm.course2.value, 
+  //     addStudentForm.course3.value, 
+  //     addStudentForm.course4.value
+  //   ]
     
-    // TODO: Ensure full first and last name; prevent one letter last initial's (e.g. Nicholas S)
+  //   // TODO: Ensure full first and last name; prevent one letter last initial's (e.g. Nicholas S)
 
-    // TODO: Ensure capatalization of names (e.g. nicholas stakoun -> Nicholas Stakoun)
+  //   // TODO: Ensure capatalization of names (e.g. nicholas stakoun -> Nicholas Stakoun)
 
-    // Course input error catching
-    for (let i = 0; i < crs.length; i++) {
-      let course = crs[i]
+  //   // Course input error catching
+  //   for (let i = 0; i < crs.length; i++) {
+  //     let course = crs[i]
 
-      // Ensure proper formatting
-      if (
-        (course.length != 8 && course.length != 9)
-        || course[6] != '-'
-      ) {
-        document.getElementById("formconfirmation").innerText = 'Error submitting... Try again!'
-        alert('Make sure your courses have the proper code + section number! \n \n Courses should look like MPM2D1-12 or ENG2D1-1')
-        return 1;
-      }
+  //     // Ensure proper formatting
+  //     if (
+  //       (course.length != 8 && course.length != 9)
+  //       || course[6] != '-'
+  //     ) {
+  //       document.getElementById("formconfirmation").innerText = 'Error submitting... Try again!'
+  //       alert('Make sure your courses have the proper code + section number! \n \n Courses should look like MPM2D1-12 or ENG2D1-1')
+  //       return 1;
+  //     }
 
-      // Alter common mistakes
+  //     // Alter common mistakes
 
-      // 5th character 0 instead of O
-      if (course[4] == '0') {
-        let str = course.split('');
-        str[4] = 'O';
-        course = str.join('');
-        crs[i] = course
-      }
+  //     // 5th character 0 instead of O
+  //     if (course[4] == '0') {
+  //       let str = course.split('');
+  //       str[4] = 'O';
+  //       course = str.join('');
+  //       crs[i] = course
+  //     }
 
-      // Course code to uppercase
-      for (let j = 0; j < course.length; j++) {
-        let code = course.charCodeAt(j)
+  //     // Course code to uppercase
+  //     for (let j = 0; j < course.length; j++) {
+  //       let code = course.charCodeAt(j)
 
-        if (code >= 97 && code <= 122) {
-          let str = course.split('');
-          code -= 32
+  //       if (code >= 97 && code <= 122) {
+  //         let str = course.split('');
+  //         code -= 32
 
-          str[j] = String.fromCharCode(code);
-          course = str.join('');
-          crs[i] = course
-        }
-      }
-    }
+  //         str[j] = String.fromCharCode(code);
+  //         course = str.join('');
+  //         crs[i] = course
+  //       }
+  //     }
+  //   }
 
-    addDoc(colRefS, {
-      firstname: addStudentForm.firstname.value,
-      lastname: addStudentForm.lastname.value,
-      courses: crs
-    })
-    .then((docRef) => {
-      document.getElementById("formconfirmation").innerText = 'Submitted! Thank you! Please refresh the page to see updates'
-      id = docRef.id
+  //   addDoc(colRefS, {
+  //     firstname: addStudentForm.firstname.value,
+  //     lastname: addStudentForm.lastname.value,
+  //     courses: crs
+  //   })
+  //   .then((docRef) => {
+  //     document.getElementById("formconfirmation").innerText = 'Submitted! Thank you! Please refresh the page to see updates'
+  //     id = docRef.id
 
-      getDocs(colRefC)
-        .then((snapshot) => {
-          let allCrs = []
-          snapshot.docs.forEach((doc) => {
-            allCrs.push({ ...doc.data(), id: doc.id})
-          })
+  //     getDocs(colRefC)
+  //       .then((snapshot) => {
+  //         let allCrs = []
+  //         snapshot.docs.forEach((doc) => {
+  //           allCrs.push({ ...doc.data(), id: doc.id})
+  //         })
 
-          for (let i = 0; i < crs.length; i++) {
-            let found = false;
-            let path = colRefCText + '/' + crs[i]
-            let ref = doc(db, path)
+  //         for (let i = 0; i < crs.length; i++) {
+  //           let found = false;
+  //           let path = colRefCText + '/' + crs[i]
+  //           let ref = doc(db, path)
 
-            for (let j = 0; j < allCrs.length; j++) {
-              if (crs[i] == allCrs[j].id) {
-                found = true;
-                updateDoc(ref, {
-                  students: arrayUnion(id)
-                })
+  //           for (let j = 0; j < allCrs.length; j++) {
+  //             if (crs[i] == allCrs[j].id) {
+  //               found = true;
+  //               updateDoc(ref, {
+  //                 students: arrayUnion(id)
+  //               })
 
-                break;
-              }
-            }
-            if (!found) {
-              setDoc(ref, {
-                students: [
-                  id
-                ]
-              })
-            }
-          }
-        })
+  //               break;
+  //             }
+  //           }
+  //           if (!found) {
+  //             setDoc(ref, {
+  //               students: [
+  //                 id
+  //               ]
+  //             })
+  //           }
+  //         }
+  //       })
 
-        // TODO: Refresh after submission
+  //       // TODO: Refresh after submission
 
-        addStudentForm.reset()
-    })
-    .catch(err => {
-      console.log(err.message)
-    })
-  })
+  //       addStudentForm.reset()
+  //   })
+  //   .catch(err => {
+  //     console.log(err.message)
+  //   })
+  // })
 }
 
 
@@ -528,9 +528,16 @@ window.updateCourses = async () => {
     document.getElementById("courseField1").value, 
     document.getElementById("courseField2").value, 
     document.getElementById("courseField3").value, 
-    document.getElementById("courseField4").value
+    document.getElementById("courseField4").value,
+    document.getElementById("courseField5").value,
+    document.getElementById("courseField6").value,
+    document.getElementById("courseField7").value,
+    document.getElementById("courseField8").value
   ]
-  
+
+  // Course filter
+  crs = crs.filter(course => course && course.trim() !== '')
+
   // TODO: Ensure full first and last name; prevent one letter last initial's (e.g. Nicholas S)
 
   // TODO: Ensure capatalization of names (e.g. nicholas stakoun -> Nicholas Stakoun)
@@ -691,7 +698,7 @@ async function loadUserInfo() {
         
         // Fill course fields if they exist
         if (user.courses) {
-          for (let i = 0; i < 4; i++) {
+          for (let i = 0; i < 8; i++) {
             const field = document.getElementById(`courseField${i+1}`);
             if (field && user.courses[i]) {
               field.value = user.courses[i];

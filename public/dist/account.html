@@ -19,7 +19,7 @@
     <div id="accountid" style="display:none"></div>
     <nav class="navbar navbar-light">
       <a class="navbar-brand" href="index.html" style="font-weight: 550;">
-        <img style="margin-right: 5px;" src="/public/dist/assets/Northern Secondary School Crest.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        <img style="margin-right: 5px;" src="./assets/Northern Secondary School Crest.png" width="30" height="30" class="d-inline-block align-top" alt="">
         Northern Course Tracker
       </a>
       <ul class="navbar-nav me-auto flex-row">
@@ -51,11 +51,11 @@
                     <form id="loginModalForm">
                         <div class="mb-3">
                             <label for="emailFieldL" class="form-label">Student TDSB Email</label>
-                            <input type="text" class="form-control" id="emailFieldL" placeholder="E.g. adam.marshall@student.tdsb.on.ca">
+                            <input type="text" class="form-control" id="emailFieldL" required>
                         </div>
                         <div class="mb-3">
                             <label for="passwordFieldL" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="passwordFieldL" placeholder="E.g. NorthernKnights123">
+                            <input type="password" class="form-control" id="passwordFieldL" required>
                         </div>
                     </form>
                     <div id="modalL-err-msg"></div>
@@ -84,19 +84,19 @@
                     <form id="signUpModalForm">
                       <div class="mb-3">
                             <label for="firstField" class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="firstField" placeholder="Adam" required>
+                            <input type="text" class="form-control" id="firstField" required>
                         </div>
                         <div class="mb-3">
                             <label for="lastField" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="lastField" placeholder="Marshall" required>
+                            <input type="text" class="form-control" id="lastField" required>
                         </div>
                         <div class="mb-3">
                             <label for="emailFieldS" class="form-label">Student TDSB Email</label>
-                            <input type="text" class="form-control" id="emailFieldS" placeholder="E.g. adam.marshall@student.tdsb.on.ca" required>
+                            <input type="text" class="form-control" id="emailFieldS" required>
                         </div>
                         <div class="mb-3">
                             <label for="passwordFieldS" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="passwordFieldS" placeholder="E.g. NorthernKnights123" required>
+                            <input type="password" class="form-control" id="passwordFieldS" required>
                         </div>
                     </form>
                     <div id="modalS-err-msg"></div>
@@ -120,28 +120,44 @@
             
             <!-- Modal Header -->
               <div class="modal-header">
-                  <h5 class="modal-title" id="modalLabel">Enter Your Semester 1 Courses</h5>
+                  <h5 class="modal-title" id="modalLabel">Enter Your 2025/26 Courses</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
             
             <!-- Modal Body -->
-              <div class="modal-body">
+              <div class="modal-body modal-dialog-scrollable">
                   <form id="signUpModalForm">
                       <div class="mb-3">
                           <label for="courseField1" class="form-label">Course Code 1</label>
-                          <input type="text" class="form-control" id="courseField1" placeholder="MPM2D1-12" required>
+                          <input type="text" class="form-control" id="courseField1">
                       </div>
                       <div class="mb-3">
                           <label for="courseField2" class="form-label">Course Code 2</label>
-                          <input type="text" class="form-control" id="courseField2" placeholder="ENG2D1-1" required>
+                          <input type="text" class="form-control" id="courseField2">
                       </div>
                       <div class="mb-3">
                           <label for="courseField3" class="form-label">Course Code 3</label>
-                          <input type="text" class="form-control" id="courseField3" placeholder="HFN2O1-3" required>
+                          <input type="text" class="form-control" id="courseField3">
                       </div>
                       <div class="mb-3">
                           <label for="courseField4" class="form-label">Course Code 4</label>
-                          <input type="text" class="form-control" id="courseField4" placeholder="SNC2D1-7" required>
+                          <input type="text" class="form-control" id="courseField4">
+                      </div>
+                      <div class="mb-3">
+                          <label for="courseField5" class="form-label">Course Code 5</label>
+                          <input type="text" class="form-control" id="courseField5">
+                      </div>
+                      <div class="mb-3">
+                          <label for="courseField6" class="form-label">Course Code 6</label>
+                          <input type="text" class="form-control" id="courseField6">
+                      </div>
+                      <div class="mb-3">
+                          <label for="courseField7" class="form-label">Course Code 7</label>
+                          <input type="text" class="form-control" id="courseField7">
+                      </div>
+                      <div class="mb-3">
+                          <label for="courseField8" class="form-label">Course Code 8</label>
+                          <input type="text" class="form-control" id="courseField8">
                       </div>
                   </form>
               </div>
@@ -189,11 +205,11 @@
     <footer class="footer">
       <!-- Open-source project available at <a href="https://github.com/Razpberry/northern-course-tracker" target="_blank" rel="noopener noreferrer">https://github.com/Razpberry/northern-course-tracker</a><br> -->
       <div style="display: flex; justify-content: center; align-items: center; gap: 3%;">
-        <p style="margin-bottom: 0;">Open-source project created by Nicholas Stakoun</p>
+        <p style="margin-bottom: 0; margin-left: 5px; margin-right: 5px;">Open-source project created by Nicholas Stakoun</p>
         <a href="https://github.com/Razpberry/northern-course-tracker" target="_blank" rel="noopener noreferrer">
           <img src="assets/github-light.png" height="25" width ="25">
         </a>
-        <p style="margin-bottom: 0;">(Feedback to nicholas@stakoun.com)</p>
+        <p style="margin-bottom: 0; margin-right: 10px; margin-left: 5px;">(Feedback to nicholas@stakoun.com)</p>
       </div>
     </footer>
   </body>
