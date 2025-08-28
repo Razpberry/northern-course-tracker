@@ -181,6 +181,18 @@ window.getCourses = () => {
               string += '<option value=' + id + '>' + id + '</option>'
             }
           }
+          else if (subject == 'eng') {
+            // Include NBE courses in English
+            if (code == 'NBE') {
+              string += '<option value=' + id + '>' + id + '</option>'
+            }
+          }
+          else if (subject == 'art') {
+            // Include NAC courses in Art
+            if (code == 'NAC') {
+              string += '<option value=' + id + '>' + id + '</option>'
+            }
+          }
           else if (subject == 'other') {
             if (first != 'a' && first != 'b' && first != 'c' && first != 'e' && first != 'f' && first != 'l' && first != 'm' && first != 'p' && first != 's' && first != 't' && code != 'GLC') {
               string += '<option value=' + id + '>' + id + '</option>'
