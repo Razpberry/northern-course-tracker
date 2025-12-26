@@ -31,8 +31,8 @@ const auth = getAuth();
 
 // init firestore database
 const db = getFirestore()
-const colRefCText = 'semesters/26-1/courses'
-const colRefSText = 'semesters/26-1/students'
+const colRefCText = 'semesters/26-2/courses'
+const colRefSText = 'students'
 const colRefC = collection(db, colRefCText)
 const colRefS = collection(db, colRefSText)
 
@@ -492,9 +492,16 @@ window.signIn = async (email, password) => {
     const errorMessage = error.message;
     const errorTxt = "Sign-in failed: " + errorCode;
     
-    const errorElement = document.getElementById("modalL-err-msg");
+    const errorElement = document.getElementById("modalL-err-msg1");
     if (errorElement) {
       errorElement.innerHTML = errorTxt;
+    }
+
+    if (errorCode === 'auth/invalid-credential') {
+      const msg2 = document.getElementById("modalL-err-msg2");
+      if (msg2) {
+        msg2.innerHTML = "If you haven't yet... Create a new account for semester 2!";
+      }
     }
     
     console.error("Sign-in failed:", errorCode, errorMessage);
@@ -534,17 +541,16 @@ window.signOutUser = async () => {
   }
 }
 
-
 window.updateCourses = async () => {
   let crs = [
     document.getElementById("courseField1").value, 
     document.getElementById("courseField2").value, 
     document.getElementById("courseField3").value, 
     document.getElementById("courseField4").value,
-    document.getElementById("courseField5").value,
-    document.getElementById("courseField6").value,
-    document.getElementById("courseField7").value,
-    document.getElementById("courseField8").value
+    // document.getElementById("courseField5").value,
+    // document.getElementById("courseField6").value,
+    // document.getElementById("courseField7").value,
+    // document.getElementById("courseField8").value
   ]
 
   // Course filter
@@ -577,6 +583,14 @@ window.updateCourses = async () => {
       course = str.join('');
       crs[i] = course
     }
+    
+    // 6th character O instead of 0
+    if (course[5] == 'O') {
+      let str = course.split('');
+      str[5] = '0';
+      course = str.join('');
+      crs[i] = course
+    }
 
     // Course code to uppercase
     for (let j = 0; j < course.length; j++) {
@@ -599,7 +613,7 @@ window.updateCourses = async () => {
 
   try {
     const userDoc = await getDoc(tempSRef)
-    const oldCourses = userDoc.data().courses || []
+    const oldCourses = (userDoc.data().courses || []).filter(course => course && course.trim() !== '')
 
     const removePromises = []
 
