@@ -18,7 +18,7 @@
   <body>
     <div id="accountid" style="display:none"></div>
     <nav class="navbar navbar-light">
-      <a class="navbar-brand" href="index.html" style="font-weight: 550;">
+      <a class="navbar-brand" href="/" style="font-weight: 550;">
         <img style="margin-right: 5px;" src="./assets/Northern Secondary School Crest.png" width="30" height="30" class="d-inline-block align-top" alt="">
         Northern Course Tracker
       </a>
@@ -31,183 +31,220 @@
             </li>
         </ul>
     </nav>
-    <div class="text">
-      <p>
-        Your Account
-      </p>
-      <div id="account-first">Your First Name: ---</div>
-      <div id="account-last">Your Last Name: ---</div>
-      <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Enter Login</h5>
-                </div>
-                
-                <!-- Modal Body -->
-                <div class="modal-body">
-                    <form id="loginModalForm">
-                        <div class="mb-3">
-                            <label for="emailFieldL" class="form-label">Student TDSB Email</label>
-                            <input type="text" class="form-control" id="emailFieldL" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="passwordFieldL" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="passwordFieldL" required>
-                        </div>
-                    </form>
-                    <div id="modalL-err-msg"></div>
-                </div>
-                
-                <!-- Modal Footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="saveButton" style="position: absolute; left: 10px;" onclick="toSignUpClick()">Sign Up</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="location.href='index.html'">Back to Home</button>
-                    <button type="button" class="btn btn-primary" id="saveButton" onclick="loginClick()">Login</button>
-                </div>
-            </div>
-        </div>
-      </div>
-      <div class="modal fade" id="signUpModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Enter Sign Up</h5>
-                </div>
-                
-                <!-- Modal Body -->
-                <div class="modal-body">
-                    <form id="signUpModalForm">
-                      <div class="mb-3">
-                            <label for="firstField" class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="firstField" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="lastField" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="lastField" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="emailFieldS" class="form-label">Student TDSB Email</label>
-                            <input type="text" class="form-control" id="emailFieldS" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="passwordFieldS" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="passwordFieldS" required>
-                        </div>
-                    </form>
-                    <div id="modalS-err-msg"></div>
-                </div>
-                
-                <!-- Modal Footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="saveButton" style="position: absolute; left: 10px;" onclick="toLoginClick()">Login</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="location.href='index.html'">Back to Home</button>
-                    <button type="button" class="btn btn-primary" id="saveButton" onclick="signUpClick()">Sign Up</button>
-                </div>
-            </div>
-        </div>
-      </div>
-      <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#coursesModal" style="margin-bottom: 20px; margin-top: 10px;">
-        Edit Courses
-      </button>
-      <div class="modal fade" id="coursesModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="true" data-bs-keyboard="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            
-            <!-- Modal Header -->
-              <div class="modal-header">
-                  <div>
-                    <h5 class="modal-title" id="modalLabel">Enter Your 2026 Semester 2 Courses</h5>
+    <div class="page">
+      <div class="text">
+        <p>
+          Your Account
+        </p>
+        <div id="account-first">Your First Name: ---</div>
+        <div id="account-last">Your Last Name: ---</div>
+        <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="modalLabel">Enter Login</h5>
                   </div>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-
-              <div class="px-4 py-2 bg-light border-bottom">
-                <small class="text-muted">
-                    <em>Include course codes with section numbers (e.g. MPM2D1-12, ENG4U0-1)</em>
-                </small>
-              </div>
-            
-            <!-- Modal Body -->
-              <div class="modal-body modal-dialog-scrollable">
-                  <form id="signUpModalForm">
-                      <div class="mb-3">
-                          <label for="courseField1" class="form-label">Course Code 1</label>
-                          <input type="text" class="form-control" id="courseField1">
-                      </div>
-                      <div class="mb-3">
-                          <label for="courseField2" class="form-label">Course Code 2</label>
-                          <input type="text" class="form-control" id="courseField2">
-                      </div>
-                      <div class="mb-3">
-                          <label for="courseField3" class="form-label">Course Code 3</label>
-                          <input type="text" class="form-control" id="courseField3">
-                      </div>
-                      <div class="mb-3">
-                          <label for="courseField4" class="form-label">Course Code 4</label>
-                          <input type="text" class="form-control" id="courseField4">
-                      </div>
-                      <!-- <div class="mb-3">
-                          <label for="courseField5" class="form-label">Course Code 5</label>
-                          <input type="text" class="form-control" id="courseField5">
-                      </div>
-                      <div class="mb-3">
-                          <label for="courseField6" class="form-label">Course Code 6</label>
-                          <input type="text" class="form-control" id="courseField6">
-                      </div>
-                      <div class="mb-3">
-                          <label for="courseField7" class="form-label">Course Code 7</label>
-                          <input type="text" class="form-control" id="courseField7">
-                      </div>
-                      <div class="mb-3">
-                          <label for="courseField8" class="form-label">Course Code 8</label>
-                          <input type="text" class="form-control" id="courseField8">
-                      </div> -->
-                  </form>
-              </div>
-            
-            <!-- Modal Footer -->
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                  <button type="button" class="btn btn-primary" id="saveButton" onclick="updateCourses()">Save Changes</button>
+                  
+                  <!-- Modal Body -->
+                  <div class="modal-body">
+                      <form id="loginModalForm">
+                          <div class="mb-3">
+                              <label for="emailFieldL" class="form-label">Student TDSB Email</label>
+                              <input type="text" class="form-control" id="emailFieldL" required>
+                          </div>
+                          <div class="mb-3">
+                              <label for="passwordFieldL" class="form-label">Password</label>
+                              <input type="password" class="form-control" id="passwordFieldL" required>
+                          </div>
+                      </form>
+                      <div id="modalL-err-msg"></div>
+                  </div>
+                  
+                  <!-- Modal Footer -->
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-primary" id="saveButton" style="position: absolute; left: 10px;" onclick="toSignUpClick()">Sign Up</button>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="location.href='index.html'">Back to Home</button>
+                      <button type="button" class="btn btn-primary" id="saveButton" onclick="loginClick()">Login</button>
+                  </div>
               </div>
           </div>
         </div>
-      </div>
-      <!-- <div style="position: absolutez;">
-        <h3 style="margin-bottom: -10px;">Enter your own courses:</h3>
-        <form id="addform" onfocusout="event.target.value = event.target.value.trim();"> -->
-          <!-- TODO: Bootstrap name input styling? -->
-          <!-- <div style="font-weight: 400; font-size: 19px; margin-bottom: 4px; margin-top: 15px;">Include code + section number!</div>
-          <label for="course1">Course Code 1: &NegativeMediumSpace;</label>
-          <input type="text" name="course1" size="13" required>
-          (e.g. MPM2D1-12)
-          <br>
-          <label for="course2">Course Code 2:</label>
-          <input type="text" name="course2" size="13" required>
-          (e.g. ENG2D1-1)
-          <br>
-          <label for="course3">Course Code 3:</label>
-          <input type="text" name="course3" size="13" required>
-          (e.g. HFN2O1-3)
-          <br>
-          <label for="course4">Course Code 4:</label>
-          <input type="text" name="course4" size="13" required>
-          (e.g. SNC2D1-7)
-          <br>
-
-          <button style="margin-top: 8px; padding-inline: 20px;">Submit</button>
-          <p id="formconfirmation"></p>
-        </form>
-      </div> -->
-      <div>
-        <button id="signOutBtn" class="btn btn-secondary" onclick="signOutUser()">
-          Sign Out
+        <div class="modal fade" id="signUpModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="modalLabel">Enter Sign Up</h5>
+                  </div>
+                  
+                  <!-- Modal Body -->
+                  <div class="modal-body">
+                      <form id="signUpModalForm">
+                        <div class="mb-3">
+                              <label for="firstField" class="form-label">First Name</label>
+                              <input type="text" class="form-control" id="firstField" required>
+                          </div>
+                          <div class="mb-3">
+                              <label for="lastField" class="form-label">Last Name</label>
+                              <input type="text" class="form-control" id="lastField" required>
+                          </div>
+                          <div class="mb-3">
+                              <label for="emailFieldS" class="form-label">Student TDSB Email</label>
+                              <input type="text" class="form-control" id="emailFieldS" required>
+                          </div>
+                          <div class="mb-3">
+                              <label for="passwordFieldS" class="form-label">Password</label>
+                              <input type="password" class="form-control" id="passwordFieldS" required>
+                          </div>
+                      </form>
+                      <div id="modalS-err-msg"></div>
+                  </div>
+                  
+                  <!-- Modal Footer -->
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-primary" id="saveButton" style="position: absolute; left: 10px;" onclick="toLoginClick()">Login</button>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="location.href='index.html'">Back to Home</button>
+                      <button type="button" class="btn btn-primary" id="saveButton" onclick="signUpClick()">Sign Up</button>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#coursesModal" style="margin-bottom: 20px; margin-top: 10px;">
+          Edit Courses
         </button>
+        <div class="modal fade" id="coursesModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              
+              <!-- Modal Header -->
+                <div class="modal-header">
+                    <div>
+                      <h5 class="modal-title" id="modalLabel">Enter Your 2026 Semester 2 Courses</h5>
+                    </div>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                </div>
+
+                <div class="px-4 py-2 bg-light border-bottom">
+                  <small class="text-muted">
+                      <em>Include course codes with section numbers (e.g. MPM2D1-12, ENG4U0-1)</em>
+                  </small>
+                </div>
+              
+              <!-- Modal Body -->
+                <div class="modal-body modal-dialog-scrollable">
+                    <form id="signUpModalForm">
+                        <div class="mb-3">
+                            <label for="courseField1" class="form-label">Course Code 1</label>
+                            <input type="text" class="form-control" id="courseField1">
+                        </div>
+                        <div class="mb-3">
+                            <label for="courseField2" class="form-label">Course Code 2</label>
+                            <input type="text" class="form-control" id="courseField2">
+                        </div>
+                        <div class="mb-3">
+                            <label for="courseField3" class="form-label">Course Code 3</label>
+                            <input type="text" class="form-control" id="courseField3">
+                        </div>
+                        <div class="mb-3">
+                            <label for="courseField4" class="form-label">Course Code 4</label>
+                            <input type="text" class="form-control" id="courseField4">
+                        </div>
+                        <!-- <div class="mb-3">
+                            <label for="courseField5" class="form-label">Course Code 5</label>
+                            <input type="text" class="form-control" id="courseField5">
+                        </div>
+                        <div class="mb-3">
+                            <label for="courseField6" class="form-label">Course Code 6</label>
+                            <input type="text" class="form-control" id="courseField6">
+                        </div>
+                        <div class="mb-3">
+                            <label for="courseField7" class="form-label">Course Code 7</label>
+                            <input type="text" class="form-control" id="courseField7">
+                        </div>
+                        <div class="mb-3">
+                            <label for="courseField8" class="form-label">Course Code 8</label>
+                            <input type="text" class="form-control" id="courseField8">
+                        </div> -->
+                    </form>
+                </div>
+              
+              <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button> -->
+                    <button type="button" class="btn btn-primary" id="saveButton" onclick="updateCourses()">Save Changes</button>
+                </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div style="position: absolutez;">
+          <h3 style="margin-bottom: -10px;">Enter your own courses:</h3>
+          <form id="addform" onfocusout="event.target.value = event.target.value.trim();"> -->
+            <!-- TODO: Bootstrap name input styling? -->
+            <!-- <div style="font-weight: 400; font-size: 19px; margin-bottom: 4px; margin-top: 15px;">Include code + section number!</div>
+            <label for="course1">Course Code 1: &NegativeMediumSpace;</label>
+            <input type="text" name="course1" size="13" required>
+            (e.g. MPM2D1-12)
+            <br>
+            <label for="course2">Course Code 2:</label>
+            <input type="text" name="course2" size="13" required>
+            (e.g. ENG2D1-1)
+            <br>
+            <label for="course3">Course Code 3:</label>
+            <input type="text" name="course3" size="13" required>
+            (e.g. HFN2O1-3)
+            <br>
+            <label for="course4">Course Code 4:</label>
+            <input type="text" name="course4" size="13" required>
+            (e.g. SNC2D1-7)
+            <br>
+
+            <button style="margin-top: 8px; padding-inline: 20px;">Submit</button>
+            <p id="formconfirmation"></p>
+          </form>
+        </div> -->
+        <div>
+          <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#nameModal">
+            Edit Name
+          </button>
+          <div class="modal fade" id="nameModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="modalLabel">Edit Account</h5>
+                  </div>
+                  
+                  <!-- Modal Body -->
+                  <div class="modal-body">
+                      <form id="nameModalForm">
+                        <div class="mb-3">
+                              <label for="firstNameField" class="form-label" id="">First Name</label>
+                              <input type="text" class="form-control" id="firstNameField" required>
+                          </div>
+                          <div class="mb-3">
+                              <label for="lastNameField" class="form-label">Last Name</label>
+                              <input type="text" class="form-control" id="lastNameField" required>
+                          </div>
+                      </form>
+                      <div id="modalS-err-msg"></div>
+                  </div>
+                  
+                  <!-- Modal Footer -->
+                  <div class="modal-footer">  
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveNameButton" onclick="updateName()">Save Changes</button>
+                  </div>
+              </div>
+          </div>
+        </div>
+          <button id="signOutBtn" class="btn btn-secondary" onclick="signOutUser()">
+            Sign Out
+          </button>
+        </div>
       </div>
     </div>
     <footer class="footer">

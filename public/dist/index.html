@@ -120,59 +120,62 @@ Cd into the root directory of Northern Course Tracker
             </div>
         </div>
     </div>
-    <div class="text">
-      <div id="selects">
-        <div class="mb-2">
-          <label>Search by student or course:</label>
-          <select name="search" id="search-select" onchange="getSearch(document.getElementById('search-select').value)">
-            <option value="">--Please choose an option--</option>
-            <option value="student">Student</option>
-            <option value="course">Course</option>
-          </select>
+    <div class="page">
+      <div class="text">
+        <div id="selects">
+          <div class="mb-2">
+            <label>Search by student or course:</label>
+            <select name="search" id="search-select" onchange="getSearch(document.getElementById('search-select').value)">
+              <option value="">--Please choose an option--</option>
+              <option value="student">Student</option>
+              <option value="course">Course</option>
+            </select>
+          </div>
+          <div class="mb-2" id="all-subjects" style="display:none">
+            <label for="subject-select">Choose a subject:</label>
+            <select name="subjects" id="subject-select" onchange="getCourses()">
+              <option value="">--Please choose a subject--</option>
+              <option value="art">Arts</option>
+              <option value="business">Business</option>
+              <option value="canadianworld">Canadian & World Studies</option>
+              <option value="eng">English</option>
+              <option value="french">French</option>
+              <option value="careers">Civics & Careers</option>
+              <option value="langs">International Languages</option>
+              <option value="math">Mathematics</option>
+              <option value="physed">Physical Education</option>
+              <option value="sci">Science</option>
+              <option value="tech">Technological Education</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div id="studentset" style="display:none"></div>
+          <div class="mb-2" id="all-students" style="display:none">
+            <label for="student-select">Choose a student:</label>
+            <select name="students" id="student-select" onchange="getStdClasses()">
+              <option value="">--Please choose a student--</option>
+            </select>
+          </div>
+          <div id="all-courses" style="display:none">
+            <label for="course-select">Choose a class:</label>
+            <select name="courses" id="course-select" onchange="getCrsStudents()">
+              <option value="">--Please choose a class--</option>
+            </select>
+          </div>
+          <br>
         </div>
-        <div class="mb-2" id="all-subjects" style="display:none">
-          <label for="subject-select">Choose a subject:</label>
-          <select name="subjects" id="subject-select" onchange="getCourses()">
-            <option value="">--Please choose a subject--</option>
-            <option value="art">Arts</option>
-            <option value="business">Business</option>
-            <option value="canadianworld">Canadian & World Studies</option>
-            <option value="eng">English</option>
-            <option value="french">French</option>
-            <option value="careers">Civics & Careers</option>
-            <option value="langs">International Languages</option>
-            <option value="math">Mathematics</option>
-            <option value="physed">Physical Education</option>
-            <option value="sci">Science</option>
-            <option value="tech">Technological Education</option>
-            <option value="other">Other</option>
-          </select>
+        <div>
+          <h2 id="list-text">Course List:</h2>
+          <p id="list">Choose what to search by!</p>
         </div>
-        <div id="studentset" style="display:none"></div>
-        <div class="mb-2" id="all-students" style="display:none">
-          <label for="student-select">Choose a student:</label>
-          <select name="students" id="student-select" onchange="getStdClasses()">
-            <option value="">--Please choose a student--</option>
-          </select>
-        </div>
-        <div id="all-courses" style="display:none">
-          <label for="course-select">Choose a class:</label>
-          <select name="courses" id="course-select" onchange="getCrsStudents()">
-            <option value="">--Please choose a class--</option>
-          </select>
-        </div>
-        <br>
       </div>
-      <div>
-        <h2 id="list-text">Course List:</h2>
-        <p id="list">Choose what to search by!</p>
+      <div class="my-courses">
+        <h2>My Courses<br><br></h2>
+        <p id="user-courses"></p>
       </div>
     </div>
-
-    <!-- Change footer by removing link and simply putting a clickable github icon -->
-
+    </div>
     <footer class="footer">
-      <!-- Open-source project available at <a href="https://github.com/Razpberry/northern-course-tracker" target="_blank" rel="noopener noreferrer">https://github.com/Razpberry/northern-course-tracker</a><br> -->
       <div style="display: flex; justify-content: center; align-items: center; gap: 3%;">
         <p style="margin-bottom: 0; margin-left: 5px; margin-right: 5px;">Open-source project created by Nicholas Stakoun</p>
         <a href="https://github.com/Razpberry/northern-course-tracker" target="_blank" rel="noopener noreferrer">

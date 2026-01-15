@@ -203,9 +203,6 @@ window.getCourses = () => {
               string += '<option value=' + id + '>' + id + '</option>'
             }
           }
-
-          //TODO: add NBE to english and NAC to art
-          
         }
 
         document.getElementById("course-select").innerHTML = string
@@ -430,11 +427,10 @@ window.signUp = async (email, password) => {
       firstname: document.getElementById("firstField").value,
       lastname: document.getElementById("lastField").value,
       email: email,
-      password: password,
       courses: []
     });
 
-    document.cookie = `userId=${docRef.id}`;
+    document.cookie = `userId=${docRef.id}; path=/; max-age=31536000`;
     console.log(document.cookie)
     console.log("Signed up:", user.email);
     window.location.href = "account.html"
@@ -469,7 +465,7 @@ window.signIn = async (email, password) => {
     
     if (userDocId && userData) {
       // Set the userId cookie
-      document.cookie = `userId=${userDocId}`;
+      document.cookie = `userId=${userDocId}; path=/; max-age=31536000`;
       
       // Update UI elements if they exist
       loadUserInfo()
@@ -500,7 +496,7 @@ window.signIn = async (email, password) => {
     if (errorCode === 'auth/invalid-credential') {
       const msg2 = document.getElementById("modalL-err-msg2");
       if (msg2) {
-        msg2.innerHTML = "If you haven't yet... Create a new account for semester 2!";
+        msg2.innerHTML = "If you haven't yet... create a new account for semester 2!";
       }
     }
     
@@ -541,6 +537,44 @@ window.signOutUser = async () => {
   }
 }
 
+window.updateName = async () => {
+  let fName = document.getElementById("firstNameField").value
+  let lName = document.getElementById("lastNameField").value
+
+  if (fName == '' || lName == '') {
+    alert('Please enter your first and last name!');
+    return;
+  }
+
+  let uid = getCookie("userId");
+  let colRefSTemp = colRefSText + '/' + uid
+  let tempSRef = doc(db, colRefSTemp)
+
+  try {
+    const userDoc = await getDoc(tempSRef)
+
+    await updateDoc(tempSRef, {
+      firstname: fName,
+      lastname: lName,
+    })
+    const nameModal = bootstrap.Modal.getInstance(document.getElementById('nameModal'));
+    if (nameModal) {
+      nameModal.hide();
+      
+      // Wait for hide animation to complete before disposing
+      document.getElementById('nameModal').addEventListener('hidden.bs.modal', function() {
+        nameModal.dispose();
+        cleanupModalBackdrops();
+
+        window.location.href = 'index.html';
+      }, { once: true });
+    }
+  }
+  catch (error) {
+    console.log('Error updating courses:', error.message);
+  }
+}
+
 window.updateCourses = async () => {
   let crs = [
     document.getElementById("courseField1").value, 
@@ -553,12 +587,13 @@ window.updateCourses = async () => {
     // document.getElementById("courseField8").value
   ]
 
+  if (!crs[0] && !crs[1] && !crs[2] && !crs[3]) {
+      alert('Please enter your course codes!');
+      return;
+  }
+
   // Course filter
   crs = crs.filter(course => course && course.trim() !== '')
-
-  // TODO: Ensure full first and last name; prevent one letter last initial's (e.g. Nicholas S)
-
-  // TODO: Ensure capatalization of names (e.g. nicholas stakoun -> Nicholas Stakoun)
 
   // Course input error catching
   for (let i = 0; i < crs.length; i++) {
@@ -643,8 +678,6 @@ window.updateCourses = async () => {
       allCrs.push({ ...doc.data(), id: doc.id})
     })
 
-    // TODO Remove student from all previous courses
-
     for (let i = 0; i < crs.length; i++) {
       let found = false;
       let path = colRefCText + '/' + crs[i]
@@ -668,8 +701,6 @@ window.updateCourses = async () => {
         })
       }
     }
-
-    // TODO: Refresh after submission
 
     // addStudentForm.reset()
     const coursesModal = bootstrap.Modal.getInstance(document.getElementById('coursesModal'));
@@ -698,13 +729,16 @@ function getCookie(name) {
 
 async function loadUserInfo() {
   const userId = getCookie('userId');
-  if (!userId) return;
+  if (!userId) {
+    document.getElementById('user-courses').innerHTML = "<div style='font-size: 20px'><em>Log in to see your courses!<em></div>";
+    return;
+  }
   try {
     const snapshot = await getDocs(colRefS);
     
-    snapshot.docs.forEach((doc) => {
-      if (doc.id === userId) {
-        const user = doc.data();
+    for (const docSnapshot of snapshot.docs) {
+      if (docSnapshot.id === userId) {
+        const user = docSnapshot.data();
 
         // Show Courses Modal if no courses have been selected
         if (!user.courses || user.courses.length === 0) {
@@ -721,10 +755,54 @@ async function loadUserInfo() {
         if (document.getElementById("account-last")) {
           document.getElementById("account-last").innerHTML = `Your Last Name: ${user.lastname}`;
         }
+        if (document.getElementById("firstNameField")) {
+          document.getElementById("firstNameField").value = `${user.firstname}`;
+        }
+        if (document.getElementById("lastNameField")) {
+          document.getElementById("lastNameField").value = `${user.lastname}`;
+        }
+        
+        // Get classmates for each course
+        if (document.getElementById("user-courses") && user.courses) {
+          let courseStr = '';
+          
+          for (let i = 0; i < user.courses.length && i < 4; i++) {
+            const courseCode = user.courses[i];
+            courseStr += `<div style='font-weight: 600'>${courseCode}</div>`;
+            
+            try {
+              const courseRef = doc(db, colRefCText + '/' + courseCode);
+              const courseDoc = await getDoc(courseRef);
+              
+              if (courseDoc.exists()) {
+                const studentIds = courseDoc.data().students || [];
+                
+                // Get all students in this course
+                const allStudents = [];
+                for (const studentDoc of snapshot.docs) {
+                  if (studentIds.includes(studentDoc.id)) {
+                    const student = studentDoc.data();
+                    allStudents.push(student.firstname + ' ' + student.lastname);
+                  }
+                }
+                
+                allStudents.sort();
+                courseStr += allStudents.join('<br>') + '<br><br>';
+              } else {
+                courseStr += 'No students found<br><br>';
+              }
+            } catch (error) {
+              console.error(`Error loading course ${courseCode}:`, error);
+              courseStr += 'Error loading students<br><br>';
+            }
+          }
+          
+          document.getElementById("user-courses").innerHTML = courseStr;
+        }
         
         // Fill course fields if they exist
         if (user.courses) {
-          for (let i = 0; i < 8; i++) {
+          for (let i = 0; i < 4; i++) {
             const field = document.getElementById(`courseField${i+1}`);
             if (field && user.courses[i]) {
               field.value = user.courses[i];
@@ -732,7 +810,7 @@ async function loadUserInfo() {
           }
         }
       }
-    });
+    }
   } catch (error) {
     console.error('Error loading user:', error);
   }
