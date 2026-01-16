@@ -18,8 +18,8 @@ body {
   padding: 10px;
 }
 
-.text {
-
+.uppercase-input {
+  text-transform: uppercase;
 }
 
 .my-courses {

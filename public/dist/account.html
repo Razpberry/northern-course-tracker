@@ -18,7 +18,7 @@
   <body>
     <div id="accountid" style="display:none"></div>
     <nav class="navbar navbar-light">
-      <a class="navbar-brand" href="/" style="font-weight: 550;">
+      <a class="navbar-brand" href="index.html" style="font-weight: 550;">
         <img style="margin-right: 5px;" src="./assets/Northern Secondary School Crest.png" width="30" height="30" class="d-inline-block align-top" alt="">
         Northern Course Tracker
       </a>
@@ -52,11 +52,11 @@
                       <form id="loginModalForm">
                           <div class="mb-3">
                               <label for="emailFieldL" class="form-label">Student TDSB Email</label>
-                              <input type="text" class="form-control" id="emailFieldL" required>
+                              <input type="email" class="form-control" id="emailFieldL" required>
                           </div>
                           <div class="mb-3">
                               <label for="passwordFieldL" class="form-label">Password</label>
-                              <input type="password" class="form-control" id="passwordFieldL" required>
+                              <input type="password" class="form-control" id="passwordFieldL" placeholder="Not your TDSB password!" required>
                           </div>
                       </form>
                       <div id="modalL-err-msg"></div>
@@ -97,7 +97,7 @@
                           </div>
                           <div class="mb-3">
                               <label for="passwordFieldS" class="form-label">Password</label>
-                              <input type="password" class="form-control" id="passwordFieldS" required>
+                              <input type="password" class="form-control" id="passwordFieldS" placeholder="Not your TDSB password!" required>
                           </div>
                       </form>
                       <div id="modalS-err-msg"></div>
@@ -138,19 +138,19 @@
                     <form id="signUpModalForm">
                         <div class="mb-3">
                             <label for="courseField1" class="form-label">Course Code 1</label>
-                            <input type="text" class="form-control" id="courseField1">
+                            <input type="text" class="form-control uppercase-input" id="courseField1">
                         </div>
                         <div class="mb-3">
                             <label for="courseField2" class="form-label">Course Code 2</label>
-                            <input type="text" class="form-control" id="courseField2">
+                            <input type="text" class="form-control uppercase-input" id="courseField2">
                         </div>
                         <div class="mb-3">
                             <label for="courseField3" class="form-label">Course Code 3</label>
-                            <input type="text" class="form-control" id="courseField3">
+                            <input type="text" class="form-control uppercase-input" id="courseField3">
                         </div>
                         <div class="mb-3">
                             <label for="courseField4" class="form-label">Course Code 4</label>
-                            <input type="text" class="form-control" id="courseField4">
+                            <input type="text" class="form-control uppercase-input" id="courseField4">
                         </div>
                         <!-- <div class="mb-3">
                             <label for="courseField5" class="form-label">Course Code 5</label>

@@ -114,7 +114,7 @@ window.getSearch = () => {
   }
 }
 
-window.getStdClasses = () => {
+window.getStdClasses = async () => {
   let student = document.getElementById("student-select").value.split('_');
   let list = document.getElementById("studentset").innerHTML.split(',')
 
@@ -131,9 +131,11 @@ window.getStdClasses = () => {
     }
   }
 
+  let courseStr = '';
+
   // Get courses from db using id
   getDocs(colRefS)
-      .then((snapshot) => {
+      .then(async (snapshot) => {
         let stds = []
         snapshot.docs.forEach((doc) => {
           stds.push({ ...doc.data(), id: doc.id})
@@ -142,20 +144,81 @@ window.getStdClasses = () => {
         for (let i = 0; i < stds.length; i++) {
           if (code == stds[i].id) {
             let crs = stds[i].courses
-            let string = ''
+            courseStr = ''
 
             for (let j = 0; j < crs.length; j++) {
-              string += crs[j] + '\n'
+              const courseCode = crs[j];
+              courseStr += `<div style='font-weight: 600'>${courseCode}</div>`;
+              
+              try {
+                const courseRef = doc(db, colRefCText + '/' + courseCode);
+                const courseDoc = await getDoc(courseRef);
+                
+                const studentIds = courseDoc.data().students || [];
+                
+                // Get all students in this course
+                const allStudents = [];
+                for (const studentDoc of snapshot.docs) {
+                  if (studentIds.includes(studentDoc.id)) {
+                    const student = studentDoc.data();
+                    allStudents.push(student.firstname + ' ' + student.lastname);
+                  }
+                }
+                
+                allStudents.sort();
+                courseStr += allStudents.join('<br>') + '<br><br>';
+
+              } catch (error) {
+                console.error(`Error loading course ${courseCode}:`, error);
+                courseStr += 'Error loading students<br><br>';
+              }
             }
-            
-            document.getElementById("list").innerText = string
+
             break;
           }
         }
+        document.getElementById("list").innerHTML = courseStr
       })  
       .catch(err => {
         console.log(err.message)
       })
+      
+  // if (document.getElementById("user-courses") && user.courses) {
+  //         let courseStr = '';
+          
+  //         for (let i = 0; i < user.courses.length && i < 4; i++) {
+  //           const courseCode = user.courses[i];
+  //           courseStr += `<div style='font-weight: 600'>${courseCode}</div>`;
+            
+  //           try {
+  //             const courseRef = doc(db, colRefCText + '/' + courseCode);
+  //             const courseDoc = await getDoc(courseRef);
+              
+  //             if (courseDoc.exists()) {
+  //               const studentIds = courseDoc.data().students || [];
+                
+  //               // Get all students in this course
+  //               const allStudents = [];
+  //               for (const studentDoc of snapshot.docs) {
+  //                 if (studentIds.includes(studentDoc.id)) {
+  //                   const student = studentDoc.data();
+  //                   allStudents.push(student.firstname + ' ' + student.lastname);
+  //                 }
+  //               }
+                
+  //               allStudents.sort();
+  //               courseStr += allStudents.join('<br>') + '<br><br>';
+  //             } else {
+  //               courseStr += 'No students found<br><br>';
+  //             }
+  //           } catch (error) {
+  //             console.error(`Error loading course ${courseCode}:`, error);
+  //             courseStr += 'Error loading students<br><br>';
+  //           }
+  //         }
+          
+  //         document.getElementById("user-courses").innerHTML = courseStr;
+  //       }
 }
 
 window.getCourses = () => {
@@ -182,8 +245,8 @@ window.getCourses = () => {
             }
           }
           else if (subject == 'eng') {
-            // Include NBE courses in English
-            if (code == 'NBE') {
+            // Include NBE and ENG courses in English
+            if (code == 'NBE' || code == 'ENG') {
               string += '<option value=' + id + '>' + id + '</option>'
             }
           }
@@ -194,7 +257,7 @@ window.getCourses = () => {
             }
           }
           else if (subject == 'other') {
-            if (first != 'a' && first != 'b' && first != 'c' && first != 'e' && first != 'f' && first != 'l' && first != 'm' && first != 'p' && first != 's' && first != 't' && code != 'GLC') {
+            if (first != 'a' && first != 'b' && first != 'c' && first != 'e' && first != 'f' && first != 'l' && first != 'm' && first != 'p' && first != 's' && first != 't' && code != 'GLC' && code != 'NBE') {
               string += '<option value=' + id + '>' + id + '</option>'
             }
           }
