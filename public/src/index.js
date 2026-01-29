@@ -14,7 +14,7 @@ import { getFirestore, collection, doc, setDoc, getDocs, getDoc, addDoc, updateD
 // getFirestore = require('firebase/firestore');
 
 // Authentication imports
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "firebase/auth";
 
 // Your web app's Firebase configuration
 import { firebaseConfig } from './config'
@@ -570,6 +570,35 @@ window.signIn = async (email, password) => {
 // Example usage
 // signUp("newuser@example.com", "my_secret_password");
 // signIn("existinguser@example.com", "my_secret_password");
+
+window.forgotPassword = async () => {
+  const email = document.getElementById("emailFieldL").value;
+
+  if (!email) {
+    const errorElement = document.getElementById("modalL-err-msg1") || document.getElementById("modalL-err-msg");
+    if (errorElement) {
+      errorElement.innerHTML = "Please enter your email address first.";
+      errorElement.style.color = "red";
+    }
+    return;
+  }
+
+  try {
+    await sendPasswordResetEmail(auth, email);
+    const msgElement = document.getElementById("modalL-err-msg1") || document.getElementById("modalL-err-msg");
+    if (msgElement) {
+      msgElement.innerHTML = "Password reset email sent! Check your inbox (and spam).";
+      msgElement.style.color = "green";
+    }
+  } catch (error) {
+    const errorElement = document.getElementById("modalL-err-msg1") || document.getElementById("modalL-err-msg");
+    if (errorElement) {
+      errorElement.innerHTML = "Error: " + error.message;
+      errorElement.style.color = "red";
+    }
+    console.error("Password reset failed:", error.code, error.message);
+  }
+}
 
 window.signOutUser = async () => {
   try {
